@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import { generate } from './generateImage.js';
 
 const client = new Client({
   'intents': [
@@ -27,7 +28,18 @@ client.on('messageCreate', async (message) => {
     if (!message.reference || !message.reference.messageId) return;
     message.channel.sendTyping();
     const parent = await message.channel.messages.fetch(message.reference.messageId);
-    message.channel.send(`### ${parent.member?.displayName || ''} @${parent.author.username}\n> ${parent.content.replace(/\n/g, '\n> ')}`);
+    message.channel.send({
+      files: [
+        {
+          attachment: await generate(
+            parent.author.username,
+            parent.member?.displayName || parent.author.displayName,
+            parent.author.displayAvatarURL({ extension: 'png', size: 4096 }),
+            parent.content,
+          ),
+        },
+      ],
+    });
   }
 });
 
