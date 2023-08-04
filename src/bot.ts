@@ -1,7 +1,13 @@
-import { Client, GatewayIntentBits } from 'discord.js';
+import { Client, GatewayIntentBits, Partials } from 'discord.js';
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessages]
+  'intents': [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.DirectMessages,
+  ],
+  'partials': [Partials.Channel],
 });
 
 //起動確認
@@ -21,7 +27,7 @@ client.on('messageCreate', async (message) => {
     if (!message.reference || !message.reference.messageId) return;
     message.channel.sendTyping();
     const parent = await message.channel.messages.fetch(message.reference.messageId);
-    message.channel.send(`### ${parent.member?.displayName} @${parent.author.username}\n> ${parent.content.replace(/\n/g, '\n> ')}`);
+    message.channel.send(`### ${parent.member?.displayName || ''} @${parent.author.username}\n> ${parent.content.replace(/\n/g, '\n> ')}`);
   }
 });
 
