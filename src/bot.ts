@@ -1,5 +1,8 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
-import { generate } from './generateImage.js';
+import { generate } from './generateImage';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const client = new Client({
   'intents': [
