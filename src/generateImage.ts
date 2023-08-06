@@ -1,5 +1,5 @@
-import { promises as fs } from 'fs';
-import satori from 'satori';
+import fs from 'fs';
+import satori, { Font } from 'satori';
 import twemoji, { Twemoji } from '@twemoji/api';
 import sharp from 'sharp';
 import { Resvg } from '@resvg/resvg-js';
@@ -19,6 +19,27 @@ const parseReturn = (text: string) => {
   }
   return children;
 }
+
+const fonts: Font[] = [
+  {
+    name: 'NotoSansJP',
+    data: fs.readFileSync('./assets/NotoSansJP-Regular.otf'),
+    weight: 400,
+    style: 'normal',
+  },
+  {
+    name: 'NotoSansJP',
+    data: fs.readFileSync('./assets/NotoSansJP-Bold.otf'),
+    weight: 700,
+    style: 'normal',
+  },
+  {
+    name: 'NotoSansMath',
+    data: fs.readFileSync('./assets/NotoSansMath-Regular.ttf'),
+    weight: 400,
+    style: 'normal',
+  },
+]
 
 export const generate = async (
   userName: string,
@@ -144,26 +165,7 @@ export const generate = async (
     {
       width: 1200,
       height: 630,
-      fonts: [
-        {
-          name: 'NotoSansJP',
-          data: await fs.readFile('./assets/NotoSansJP-Regular.otf'),
-          weight: 400,
-          style: 'normal',
-        },
-        {
-          name: 'NotoSansJP',
-          data: await fs.readFile('./assets/NotoSansJP-Bold.otf'),
-          weight: 700,
-          style: 'normal',
-        },
-        {
-          name: 'NotoSansMath',
-          data: await fs.readFile('./assets/NotoSansMath-Regular.ttf'),
-          weight: 400,
-          style: 'normal',
-        },
-      ],
+      fonts,
       loadAdditionalAsset: async (code, text) => {
         if (code === 'emoji') {
           const _twemoji = twemoji as Twemoji;
