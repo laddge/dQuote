@@ -2,7 +2,6 @@ import fs from 'fs';
 import satori, { Font } from 'satori';
 import twemoji, { Twemoji } from '@twemoji/api';
 import sharp from 'sharp';
-import { Resvg } from '@resvg/resvg-js';
 
 const parseReturn = (text: string) => {
   const children = [];
@@ -41,6 +40,15 @@ const fonts: Font[] = [
   },
 ]
 
+type ImageCache = {
+  [key: string]: {
+    color: string,
+    grayscale: string,
+  },
+}
+
+const cache: ImageCache = {};
+
 export const generate = async (
   userName: string,
   userDisplayName: string,
@@ -48,9 +56,32 @@ export const generate = async (
   content: string,
   light?: boolean,
 ) => {
-  const res = await fetch(avatarURL);
-  const img = sharp(Buffer.from(await res.arrayBuffer()))
-  const avatar = (light ? await img.toBuffer() : await img.grayscale().toBuffer()).toString('base64');
+  let avatar: string;
+  if (!cache[avatarURL]) {
+    cache[avatarURL] = {
+      color: '',
+      grayscale: '',
+    };
+  }
+  if (light) {
+    if (cache[avatarURL].color) {
+      avatar = cache[avatarURL].color;
+    } else {
+      const res = await fetch(avatarURL);
+      const img = sharp(Buffer.from(await res.arrayBuffer()));
+      avatar = (await img.toBuffer()).toString('base64');
+      cache[avatarURL].color = avatar;
+    }
+  } else {
+    if (cache[avatarURL].grayscale) {
+      avatar = cache[avatarURL].grayscale;
+    } else {
+      const res = await fetch(avatarURL);
+      const img = sharp(Buffer.from(await res.arrayBuffer())).grayscale();
+      avatar = (await img.toBuffer()).toString('base64');
+      cache[avatarURL].grayscale = avatar;
+    }
+  }
   const svg = await satori(
     {
       type: 'div',
@@ -171,18 +202,22 @@ export const generate = async (
       loadAdditionalAsset: async (code, text) => {
         if (code === 'emoji') {
           const _twemoji = twemoji as Twemoji;
-          const src = _twemoji.parse(text, { folder: 'svg', ext: '.svg' }).match(/src=\"(.+)\"/);
+          const src = _twemoji.parse(text).match(/src=\"(.+)\"/);
           if (src) {
-            const res = await fetch(src[1]);
-            const svg = await res.text();
-            return 'data:image/svg+xml;base64,' + btoa(svg);
+            if (!cache[src[1]]) {
+              cache[src[1]] = { color: '', grayscale: '' };
+            }
+            if (!cache[src[1]].color) {
+              const res = await fetch(src[1]);
+              const img = await res.arrayBuffer();
+              cache[src[1]].color = Buffer.from(img).toString('base64');
+            }
+            return 'data:image/png;base64,' + cache[src[1]].color;
           }
         }
         return '';
       },
     },
   );
-  const resvg = new Resvg(svg);
-  const pngData = resvg.render();
-  return pngData.asPng();
+  return sharp(Buffer.from(svg)).png().toBuffer();
 }
