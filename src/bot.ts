@@ -42,6 +42,7 @@ client.on('messageCreate', async (message) => {
             parent.member?.displayName || parent.author.displayName,
             parent.author.displayAvatarURL({ extension: 'png', size: 4096 }),
             parent.content,
+            args.indexOf('light') != -1,
           ),
         },
       ],

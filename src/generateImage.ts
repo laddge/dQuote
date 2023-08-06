@@ -46,9 +46,11 @@ export const generate = async (
   userDisplayName: string,
   avatarURL: string,
   content: string,
+  light?: boolean,
 ) => {
   const res = await fetch(avatarURL);
-  const avatar = (await sharp(Buffer.from(await res.arrayBuffer())).grayscale().toBuffer()).toString('base64');
+  const img = sharp(Buffer.from(await res.arrayBuffer()))
+  const avatar = (light ? await img.toBuffer() : await img.grayscale().toBuffer()).toString('base64');
   const svg = await satori(
     {
       type: 'div',
@@ -57,6 +59,7 @@ export const generate = async (
           display: 'flex',
           width: '100%',
           height: '100%',
+          backgroundColor: light ? '#fff' : '#000',
           background: `url(data:image/png;base64,${avatar})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: '630px 630px',
@@ -70,7 +73,7 @@ export const generate = async (
                 display: 'flex',
                 width: '100%',
                 height: '100%',
-                background: 'linear-gradient(to right, transparent, transparent 23%, #000 45%)',
+                background: `linear-gradient(to right, transparent, transparent 23%, ${light ? '#fff' : '#000'} 45%)`,
                 justifyContent: 'flex-end',
                 alignItems: 'center',
               },
@@ -98,7 +101,6 @@ export const generate = async (
                             width: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#fff',
                             fontSize: '48px',
                             fontWeight: 700,
                           },
@@ -112,7 +114,7 @@ export const generate = async (
                                   width: '100%',
                                   justifyContent: 'center',
                                   alignItems: 'center',
-                                  color: '#fff',
+                                  color: light ? '#000' : '#fff',
                                   fontSize: '48px',
                                   fontWeight: 700,
                                 },
@@ -130,7 +132,7 @@ export const generate = async (
                             width: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#fff',
+                            color: light ? '#000' : '#fff',
                             fontSize: '36px',
                             transform: 'skewX(-10deg)',
                             marginTop: '32px',
@@ -146,7 +148,7 @@ export const generate = async (
                             width: '100%',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            color: '#ccc',
+                            color: light ? '#333' : '#ccc',
                             fontSize: '32px',
                             marginBottom: '32px',
                           },
