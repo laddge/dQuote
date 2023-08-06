@@ -17,6 +17,9 @@ dependencies:
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
+  microtime:
+    specifier: ^3.1.1
+    version: 3.1.1
   satori:
     specifier: ^0.10.2
     version: 0.10.2
@@ -31,6 +34,9 @@ dependencies:
     version: 10.9.1(@types/node@20.4.7)(typescript@5.1.6)
 
 devDependencies:
+  '@types/microtime':
+    specifier: ^2.1.0
+    version: 2.1.0
   '@types/node':
     specifier: ^20.4.7
     version: 20.4.7
@@ -303,6 +309,10 @@ packages:
       twemoji-parser: 14.0.0
       universalify: 0.1.2
     dev: false
+
+  /@types/microtime@2.1.0:
+    resolution: {integrity: sha512-4mUXDZ9ISb7vpu7Q5cR9Itl2ncbYzn7nVgplTLBHoM4M3Mt85dK12CXIMGn+F8ZD0CMiWhjBajJyDY5yxijC0Q==}
+    dev: true
 
   /@types/node@20.4.7:
     resolution: {integrity: sha512-bUBrPjEry2QUTsnuEjzjbS7voGWCc30W0qzgMf90GPeDGFRakvrz47ju+oqDAKCXLUCe39u57/ORMl/O/04/9g==}
@@ -598,6 +608,15 @@ packages:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
     dev: false
 
+  /microtime@3.1.1:
+    resolution: {integrity: sha512-to1r7o24cDsud9IhN6/8wGmMx5R2kT0w2Xwm5okbYI3d1dk6Xv0m+Z+jg2vS9pt+ocgQHTCtgs/YuyJhySzxNg==}
+    engines: {node: '>= 14.13.0'}
+    requiresBuild: true
+    dependencies:
+      node-addon-api: 5.1.0
+      node-gyp-build: 4.6.0
+    dev: false
+
   /mimic-response@3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
@@ -622,8 +641,17 @@ packages:
       semver: 7.5.4
     dev: false
 
+  /node-addon-api@5.1.0:
+    resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
+    dev: false
+
   /node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
+    dev: false
+
+  /node-gyp-build@4.6.0:
+    resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==}
+    hasBin: true
     dev: false
 
   /once@1.4.0:

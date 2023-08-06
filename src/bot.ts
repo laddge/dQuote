@@ -1,5 +1,6 @@
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 import { generate } from './generateImage';
+import microtime from 'microtime';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,8 +28,10 @@ client.on('messageCreate', async (message) => {
     return;
   }
 
-  if (message.content.trim() == '!quote') {
+  const args = message.content.trim().split(' ');
+  if (args[0] == '!quote') {
     if (!message.reference || !message.reference.messageId) return;
+    const start = microtime.now();
     message.channel.sendTyping();
     const parent = await message.channel.messages.fetch(message.reference.messageId);
     message.channel.send({
@@ -43,6 +46,9 @@ client.on('messageCreate', async (message) => {
         },
       ],
     });
+    if (args.indexOf('time') != -1) {
+      message.channel.send(`${(microtime.now() - start) / 1000000}s`);
+    }
   }
 });
 

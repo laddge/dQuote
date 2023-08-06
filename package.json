@@ -15,12 +15,14 @@
     "@twemoji/api": "^14.1.2",
     "discord.js": "^14.12.1",
     "dotenv": "^16.3.1",
+    "microtime": "^3.1.1",
     "satori": "^0.10.2",
     "satori-html": "^0.3.2",
     "sharp": "^0.32.4",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "@types/microtime": "^2.1.0",
     "@types/node": "^20.4.7",
     "typescript": "^5.1.6"
   }
