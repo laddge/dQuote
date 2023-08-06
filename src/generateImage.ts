@@ -77,8 +77,9 @@ export const generate = async (
       avatar = cache[avatarURL].grayscale;
     } else {
       const res = await fetch(avatarURL);
-      const img = sharp(Buffer.from(await res.arrayBuffer())).grayscale();
-      avatar = (await img.toBuffer()).toString('base64');
+      const img = sharp(Buffer.from(await res.arrayBuffer()));
+      cache[avatarURL].color = (await img.toBuffer()).toString('base64');
+      avatar = (await img.grayscale().toBuffer()).toString('base64');
       cache[avatarURL].grayscale = avatar;
     }
   }
